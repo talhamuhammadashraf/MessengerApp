@@ -11,9 +11,11 @@ export class Authentication{
                 firebase.auth().currentUser.updateProfile({
                     displayName: user.name,
                 })
+                let uid=firebase.auth().currentUser.uid
                 firebase.database().ref("user").child(firebase.auth().currentUser.uid).set(
                     user
                 )
+                firebase.database().ref("user").child(uid).child("UID").set(uid)                
                 store.dispatch(Authentication.sign_up_success(user));
                 store.dispatch(NavigationActions.navigate({ routeName: 'Home' }))
             // this.props.navigation.navigate("signup");

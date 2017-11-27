@@ -26,10 +26,11 @@ export class Chat {
     //----------------------------------------------------------------
     static AddReq = (uid) => {
         store.dispatch(Chat.Add())
-        firebase.database().ref("user").child(uid).child("MyChats").push(firebase.auth().currentUser.uid).then
+        var currentUser=firebase.auth().currentUser.uid
+        firebase.database().ref("user").child(uid).child("MyChats").child(currentUser).push({[firebase.auth().currentUser.displayName]:"Hi I've added you"}).then
             (() => {
-                firebase.database().ref("user").child(firebase.auth().currentUser.uid).child("MyChats").push(uid)
-                store.dispatch(Chat.AddSuccess())
+                firebase.database().ref("user").child(currentUser).child("MyChats").child(uid).push({[firebase.auth().currentUser.displayName]:"Hi I've added you"}).then
+                (()=>store.dispatch(Chat.AddSuccess()))
             }
             , (err) => { store.dispatch(Chat.AddFail(err)) }
             )
@@ -48,15 +49,22 @@ export class Chat {
     //------------------------------------------------------------------
     static MyChatReq=()=>{
         store.dispatch(Chat.MyChats())
-        firebase.database().ref("user").child(firebase.auth().currentUser.uid).child("MyChats").once("value",(snap)=>{
+        firebase.database().ref("user").child(firebase.auth().currentUser.uid).child("MyChats").on("value",(snap)=>{
             var data=snap.val();
-            var values=Object.values(data);
-            var chatPerson;
-            // values.map((data)=>{firebase.database().ref("user").child(data).on("value",(snap)=>{var person=snap.val();chatPerson.push(person)})})
-            // console.log(values);
-            // console.log(chatPerson)            
+            var values
+            values=Object.keys(data);
+            console.log(values)
+            var chatPerson=[];
+            values.map((data)=>{firebase.database().ref("user").child(data).on("value",(snap)=>{var person=snap.val();chatPerson.push(person)})})
+            console.log(values);
+            console.log(chatPerson)            
+            if (!chatPerson.length){
+                store.dispatch(Chat.MyChatsFail("Empty"))
+            }
+            else{
+                setTimeout(()=>{store.dispatch(Chat.MyChatsSuccess(chatPerson))},300);
+            }
         })
-        // store.dispatch(Chat.MyChatsSuccess())
     }
     static MyChats = () => ({
         type: "MyChats"

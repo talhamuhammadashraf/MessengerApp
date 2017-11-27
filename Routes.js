@@ -6,6 +6,7 @@ import Settings from "./src/components/settings"
 import {Authentication} from './src/store/actions/auth'
 import Register from "./src/components/register"
 import MyChats from "./src/components/chats"
+import DisplayChat from "./src/components/displayChat"
 import findFriends from "./src/components/findFriends"
 const MyHomeScreen =()=>(<View><Text>login</Text></View>)
 const App =()=>(<View><Text>App</Text></View>)
@@ -42,6 +43,12 @@ const Routes = StackNavigator({
     },
     signup: {
         screen: Register,
+        navigationOptions: {
+            header: null
+        }
+    },
+    msg: {
+        screen: DisplayChat,
         navigationOptions: {
             header: null
         }
