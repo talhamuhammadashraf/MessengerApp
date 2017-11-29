@@ -16,7 +16,7 @@ const MyApp = TabNavigator({
     Settings: {
       screen: Settings,
     },
-    Notifications: {
+    "Find Friends": {
       screen: findFriends,
     },
     Chats: {
@@ -49,10 +49,12 @@ const Routes = StackNavigator({
     },
     msg: {
         screen: DisplayChat,
-        navigationOptions: {
-            header: null
+        navigationOptions: ({navigation}) => ({
+            title: `${navigation.state.params.name}`,
+            headerStyle:{backgroundColor:"#137777",
+            
         }
-    },
+          })        },
     Home: {
         screen: MyApp,
         navigationOptions: {

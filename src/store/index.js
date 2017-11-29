@@ -3,6 +3,7 @@ import {createStore , applyMiddleware} from 'redux';
 import navReducer from './reducers/navReducer';
 import {NavigationActions} from 'react-navigation'
 import {Auth} from './reducers/auth';
+import {Message} from './reducers/messages';
 import {Chat} from './reducers/chat';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
@@ -27,7 +28,7 @@ export class Constants {
     }
 
 const rootReducer = combineReducers({
-    navReducer,Auth,Chat
+    navReducer,Auth,Chat,Message
 });
 
 const middleware = applyMiddleware(thunk,logger);
